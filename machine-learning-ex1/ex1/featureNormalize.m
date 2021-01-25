@@ -30,18 +30,12 @@ mu = mean(X); % ø≠ ¥‹¿ß(default)
 sigma = std(X);
 
 
-
-%vectorizing!
-
-
 for i=1:size(X_norm,1),
   for j=1:size(X_norm,2),
     X_norm(i,j) -= mu(1,j);
     X_norm(i,j) /= sigma(1,j);
   endfor
 endfor
-
-fprintf('%d',X_norm(1,1))
 
 
 % ============================================================

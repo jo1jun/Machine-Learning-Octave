@@ -18,7 +18,7 @@ for iter = 1:num_iters
     %
 
     %fully vectorize
-    theta -= (alpha / m) * (X'*(X*theta - y)) 
+    theta -= (alpha / m) * (X'*(X*theta - y));
 
     % ============================================================
 
