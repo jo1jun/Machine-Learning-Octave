@@ -29,6 +29,11 @@ sigma = zeros(1, size(X, 2));
 mu = mean(X); % ø≠ ¥‹¿ß(default)
 sigma = std(X);
 
+
+
+%vectorizing!
+
+
 for i=1:size(X_norm,1),
   for j=1:size(X_norm,2),
     X_norm(i,j) -= mu(1,j);
@@ -36,8 +41,7 @@ for i=1:size(X_norm,1),
   endfor
 endfor
 
-%vectorizing!
-
+fprintf('%d',X_norm(1,1))
 
 
 % ============================================================

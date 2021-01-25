@@ -17,16 +17,8 @@ for iter = 1:num_iters
     %       of the cost function (computeCostMulti) and gradient here.
     %
 
-
-    delta = zeros(size(theta),1);
-    for i=1:m,
-      delta += (X(i,:)*theta - y(i))*X(i,:)'; %배운대로 delta 는 n+1 벡터!
-    endfor
-    delta /= m;
-    theta -= alpha*delta;
-
-
-
+    %fully vectorize
+    theta -= (alpha / m) * (X'*(X*theta - y)) 
 
     % ============================================================
 
