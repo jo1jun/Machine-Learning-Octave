@@ -39,7 +39,7 @@ X = data(:, 1:2);
 y = data(:, 3);
 m = length(y);
 
-% Print out some data points
+% Print out some data points  
 fprintf('First 10 examples from the dataset: \n');
 fprintf(' x = [%.0f %.0f], y = %.0f \n', [X(1:10,:) y(1:10,:)]');
 
@@ -120,13 +120,18 @@ theta = zeros(3,1);
 plot(1:50, J3(1:50), 'k');
 alpha = 0.3;
 theta = zeros(3,1);
-alpha = 1;
 [theta, J4] = gradientDescentMulti(X, y, theta, alpha, num_iters);
-plot(1:50, J4(1:50), 'g');
+plot(1:50, J4(1:50), 'c');
+alpha = 1;
 theta = zeros(3,1);
 [theta, J5] = gradientDescentMulti(X, y, theta, alpha, num_iters);
-plot(1:50, J5(1:50), 'y');
+plot(1:50, J5(1:50), 'g');
 % 여기서 alpha 를 다시 3배하면 J 가 발산한다. 
+%alpha = 3;
+%theta = zeros(3,1);
+%[theta, J6] = gradientDescentMulti(X, y, theta, alpha, num_iters);
+%plot(1:50, J6(1:50), 'y');
+
 
 price = [1 (1650-mu(1,1))/sigma(1,1) (3-mu(1,2))/sigma(1,2)]*theta;
 
