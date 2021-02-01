@@ -57,7 +57,14 @@ fprintf('\nTesting lrCostFunction() with regularization');
 
 theta_t = [-2; -1; 1; 2];
 X_t = [ones(5,1) reshape(1:15,5,3)/10];
+
+fprintf('%f \n', X_t(1,1));
+fprintf('%f \n', X_t(1,2));
+fprintf('%f \n', X_t(1,3));
+fprintf('%f \n', X_t(1,4));
+
 y_t = ([1;0;1;0;1] >= 0.5);
+fprintf('\n %f \n', y_t);
 lambda_t = 3;
 [J grad] = lrCostFunction(theta_t, X_t, y_t, lambda_t);
 

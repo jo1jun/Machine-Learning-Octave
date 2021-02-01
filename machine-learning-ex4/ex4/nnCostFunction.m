@@ -70,6 +70,9 @@ z3 = a2*Theta2';
 a3 = sigmoid(z3);
 h = a3;
 
+
+% cost 함수에서 y 는 1~10 의 값이 아닌 0과 1로 표현된 값이므로 vector 을 matrix 로.
+% y^(i) 는 10차원 벡터여야 하므로(신경망 학습을 위해) y 는 5000*10 matrix.
 ymatrix = zeros(size(y,1) , num_labels);
 
 for i=1:m,
@@ -78,34 +81,24 @@ for i=1:m,
 endfor
 
 J = (1/m)*sum(sum((-ymatrix.*log(h) - (1-ymatrix).*(log(1-h)))));
-
 % bias 는 제거!! (401 중 맨 앞 1 떼어내고 제곱)
 J += lambda/(2*m)*(sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
 
-% cost 함수에서 y 는 1~10 의 값이 아닌 0과 1로 표현된 값이므로 vector 을 matrix 로.
-% y^(i) 는 10차원 벡터여야 하므로(신경망 학습을 위해) 전체 dataset 은 5000*10 matrix.
-
-%위는 잘 동작. 그러나 back propagation 에서 잘 안된다. 일단 추천한 대로 for loop 써보자.
-%아니야.... 행렬 계산 실수해서 그래... 피드백하라.
-
-delta3 = h - ymatrix;
+#vectorize
+delta3 = (h - ymatrix) / m;
+%batch size 가 m 이므로 m 으로 나누기.
 delta2 = delta3*Theta2(:,2:end).*sigmoidGradient(z2);
 %theta2 (10 * 26) 의 bias 부분을 떼어내서(10 * 25) 계산.
-%bias 까지 다 포함시키고 싶으면(거의 안 할듯) 떼어내지 말고 sigmoid 도함수에 1 붙여야 한다.
 
-
-Theta1_grad = (delta2'*a1)/m;
-Theta2_grad = (delta3'*a2)/m;
+Theta1_grad = (delta2'*a1);
+Theta2_grad = (delta3'*a2);
 
 Theta1_grad += lambda/m*Theta1;
 Theta1_grad(:,1) -= lambda/m*Theta1(:,1);
 Theta2_grad += lambda/m*Theta2;
 Theta2_grad(:,1) -= lambda/m*Theta2(:,1);
 
-
-##r1 = 0;
-##r2 = 0;
-##
+#for loop
 ##for i=1:m,
 ##  a1 = X(i,:)';
 ##  a1 = [1; a1];
@@ -114,20 +107,16 @@ Theta2_grad(:,1) -= lambda/m*Theta2(:,1);
 ##  a2 = [1; a2];
 ##  z3 = Theta2*a2;
 ##  a3 = sigmoid(z3);
+##  h = a3;
 ##  
-##  tempy = zeros(num_labels, 1);
-##  tempy(y(i)) = 1; % y 가 정수값으로 이루어져있으므로 벡터로 mapping.
-##  d3 = a3 - tempy;
-##  d2 = Theta2'*d3.*[1; sigmoidGradient(z2)]; %여기서 의문. 다시 이해하자.
-##  d2 = d2(2:end); %delta^(l) 중에서 0번째는 없다. (bias 의 delta 없음)
-##  r1 += d2*a1';
-##  r2 += d3*a2'; 
+##  d3 = (h - ymatrix(i,:)') / m;  %batch size 가 m 이므로 m 으로 나누기.
+##  d2 = Theta2(:,2:end)'*d3.*sigmoidGradient(z2); %bias 부분을 떼어낸 뒤 d2 계산
+##  Theta1_grad += d2*a1';
+##  Theta2_grad += d3*a2'; 
 ##endfor
 ##
-##Theta1_grad = r1/m + lambda/m*Theta1;
-##Theta1_grad(:,1) -= lambda/m*Theta1(:,1);
-##Theta2_grad = r2/m + lambda/m*Theta2;
-##Theta2_grad(:,1) -= lambda/m*Theta2(:,1);
+##Theta1_grad(:,2:end) += lambda/m*Theta1(:,2:end);
+##Theta2_grad(:,2:end) += lambda/m*Theta2(:,2:end);
 
 ##행렬 덧셈, 뺄셈할 때 크기비교 똑바로 하자. 10x3 +/- 10x1 하면 왼쪽의 모든 열마다
 ##뒤의 벡터를 덧셈/뺄셈 하게된다... 이것때문에 시간 너무 많이 잡아먹음 조심하자.

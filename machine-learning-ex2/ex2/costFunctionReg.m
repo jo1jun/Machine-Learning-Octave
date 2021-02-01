@@ -20,6 +20,8 @@ grad = zeros(size(theta));
 J = -y'* log(sigmoid(X*theta)) -(1-y)'*log(1-sigmoid(X*theta));
 J/=m;
 
+fprintf('%f', J)
+
 tempJ = 0;
 for i=2:size(theta),
   tempJ += theta(i)^2;
