@@ -101,7 +101,6 @@ while ~isempty(email_contents)
 
     for i = 1:length(vocabList),
       if strcmp(vocabList{i},str) == 1, % 이거 그냥 = 썼다가 시간 엄청날림.. 주의..
-        strcmp(vocabList{i},str)
         word_indices = [word_indices ; i];
         break;
       endif
